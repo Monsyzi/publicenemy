@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="https://file.garden/aT6vZ4PVCwXB1BNw/994f2c6ff2fc77fa65350b0ed08bbecd-removebg-preview.png" type="image/png">
+  <title>@ Public Enemy</title>
+
+  <style>
+    html, body { height: 100%; margin: 0; padding: 0; }
+
+    /* Intro panel */
+    #intro-panel {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(10px);
+      font-size: 15px;
+      color: white;
+      cursor: pointer;
+      transition: opacity 0.6s ease;
+      z-index: 999;
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: 4px;
+    }
+    .intro-text { opacity: 0.9; }
+
+    body::before {
+      content: "";
+      position: fixed;
+      width: 500%;
+      display: flex;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(6px);
+      inset: 0;
+      z-index: -1;
+    }
+
+    body {
+      background: url('https://file.garden/aW8HDeuOhVaBst0Z/xzawx.jpg') no-repeat center center / cover;
+      background-attachment: fixed;
+      color: #000000;
+      margin: 0;
+      padding: 40px 0;
+    }
+
+    .top-nav {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 70px;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .top-logo {
+      width: 200px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      min-width: 160px;
+      transition: transform 0.25s ease;
+      padding-top: 60px;
+    }
+    .top-logo:hover { transform: scale(1.05); }
+
+    /* Views counter */
+    .views-badge {
+      color: #fff;
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: 2px;
+      font-size: 13px;
+      opacity: .9;
+      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 10px 14px;
+      border-radius: 14px;
+      backdrop-filter: blur(10px);
+    }
+
+    .content {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 40px;
+      overflow-x: hidden;
+    }
+
+    section {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto 50px auto;
+      padding: 0;
+    }
+
+    /* Default gradient for other sections (white to black to white) */
+    .partners {
+      text-align: center;
+      font-size: 30px;
+      color: #ffffff;
+      margin: 60px 0 20px;
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(to right, #fff, #000, #fff);
+      background-size: 400% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: infiniteGradient 5s linear infinite;
+      white-space: nowrap;
+      letter-spacing: .15em;
+    }
+
+    /* Special pink gradient ONLY for Fineshyt section */
+    #pbe-title {
+      background: linear-gradient(to right, #ff69b4, #ffc0cb, #ff69b4, #ffb6c1, #ff69b4);
+      background-size: 400% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: infiniteGradient 5s linear infinite;
+    }
+
+    .typing-caret { border-right: .15em solid white; animation: blink-caret 750ms step-end infinite; }
+
+    @keyframes infiniteGradient { 0% { background-position: 0% 0%; } 100% { background-position: 100% 0%; } }
+    @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: white; } }
+
+    /* Profiles layout */
+    .founded-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      justify-items: center;
+      align-items: center;
+      gap: 20px 40px;
+      width: 100%;
+      max-width: 400px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .profile { position: relative; display: flex; flex-direction: column; align-items: center; }
+    .profile-pic {
+      width: 110px; height: 110px; border-radius: 50%; object-fit: cover;
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer; margin-bottom: 10px;
+    }
+    .profile-pic:hover { transform: scale(1.1) rotate(360deg); }
+
+    .profile-info {
+      position: absolute;
+      bottom: 110%;
+      left: 50%;
+      transform: translateX(-50%) scale(0.9);
+      width: 220px;
+      min-height: 100px;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: white;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      z-index: 999;
+      text-align: left;
+    }
+    .profile:hover .profile-info {
+      opacity: 1;
+      transform: translateX(-50%) scale(1) translateY(-20px);
+      pointer-events: auto;
+    }
+
+    .status-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-left: 6px; vertical-align: middle; }
+    .status-online { background-color: #43b581; }
+    .status-idle { background-color: #faa61a; }
+    .status-dnd { background-color: #f04747; }
+    .status-offline { background-color: #747f8d; }
+
+    .info-avatar {
+      width: 45px; height: 45px; border-radius: 50%; object-fit: cover;
+      float: left; margin-right: 12px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .info-text-container { padding-left: 0; margin-bottom: 5px; overflow: hidden; }
+    .name-row { display: flex; align-items: center; gap: 8px; margin-top: 0; }
+
+    .profile-name { font-size: 15px; font-weight: bold; display: block; white-space: nowrap; }
+    .profile-username { font-size: 11px; opacity: 0.7; display: block; }
+
+    .activity-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+      min-height: 45px;
+      clear: both;
+    }
+
+    .activity-text { text-align: left; flex-shrink: 1; flex-grow: 1; min-width: 0; }
+    .section-divider { width: 100%; height: 1px; margin: 6px 0; background: rgba(255, 255, 255, 0.15); }
+
+    .activity-icon {
+      width: 45px; height: 45px;
+      border-radius: 8px;
+      object-fit: cover;
+      flex-shrink: 0;
+      margin-left: 8px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+      overflow: hidden;
+    }
+
+    .profile-activity { font-size: 13px; font-weight: bold; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .activity-details { font-size: 11px; opacity: 0.8; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* Swag slider */
+    .swag-slider { width: 100%; overflow: hidden; padding: 180px 0 20px; position: relative; }
+    .swag-list-container { display: flex; gap: 10px; width: max-content; animation: scrollLoop 10s linear infinite; }
+
+    @keyframes scrollLoop { from { transform: translateX(100vw); } to { transform: translateX(-100vw); } }
+
+    .swag-slider:hover .swag-list-container { animation-play-state: paused; }
+
+    .swag {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 10px 18px;
+      border-radius: 50px;
+      transition: transform 0.2s ease;
+      backdrop-filter: blur(4px);
+    }
+    .swag:hover { transform: scale(1.05); }
+
+    .swag img { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; }
+    .swag span { font-size: 12px; color: white; font-weight: 600; }
+
+    .swag-hover-card {
+      position: absolute;
+      top: -150px;
+      left: 60%;
+      transform: translateX(-50%) scale(0.9);
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .swag:hover .swag-hover-card {
+      opacity: 1;
+      transform: translateX(-50%) scale(1) translateY(-10px);
+      pointer-events: auto;
+    }
+
+    /* Server cards */
+    .server-grid {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 25px;
+      padding: 40px 20px;
+    }
+
+    .server-card {
+      width: 220px;
+      height: 410px;
+      background: rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(14px);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      border: 1.5px solid rgba(255,255,255,0.15);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .server-card:hover { transform: translateY(-6px); }
+
+    .server-banner { width: 100%; height: 135px; background-size: cover; background-position: center; }
+
+    .server-body {
+      flex: 1;
+      padding: 65px 18px 25px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .server-icon {
+      width: 85px; height: 85px;
+      border-radius: 50%;
+      border: 4px solid rgba(255,255,255,0.2);
+      object-fit: cover;
+      position: absolute;
+      top: -42px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .server-name {
+      margin-top: 48px;
+      font-size: 17px;
+      font-weight: 700;
+      color: #fff;
+      text-align: center;
+      text-shadow: 0 3px 10px rgba(0,0,0,0.5);
+      word-break: break-word;
+    }
+
+    .server-stats {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #ddd;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .join-btn {
+      margin-top: auto;
+      width: 95%;
+      padding: 11px 0;
+      border: none;
+      border-radius: 12px;
+      background: rgba(88,101,242,0.85);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .join-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 35px rgba(88,101,242,0.5);
+    }
+  </style>
+</head>
+
+<body>
+  <div id="intro-panel">
+    <div class="intro-text">click</div>
+  </div>
+
+  <div class="content" style="display:none;">
+    <div class="top-nav">
+      <img class="top-logo" src="https://file.garden/aT6vZ4PVCwXB1BNw/994f2c6ff2fc77fa65350b0ed08bbecd-removebg-preview.png" alt="Logo">
+      <div class="views-badge">Views: <span id="view-count">0</span></div>
+    </div>
+
+    <section id="founded-section">
+      <h2 class="partners" id="founded-title"></h2>
+      <div id="founded-list" class="founded-container"></div>
+    </section>
+
+    <section id="fvck-everyone-section">
+      <h2 class="partners" id="fvck-everyone-title"></h2>
+      <div id="fvck-everyone-list" class="founded-container"></div>
+    </section>
+
+    <!-- NEW: PBE same style as 4/u + Above All -->
+    <section id="pbe-section">
+      <h2 class="partners" id="pbe-title"></h2>
+      <div id="pbe-list" class="founded-container"></div>
+    </section>
+
+    <section id="swags-section">
+      <h2 class="partners" id="swags-title"></h2>
+      <div class="swag-slider">
+        <div id="swag" class="swag-list-container"></div>
+      </div>
+    </section>
+
+    <div class="server-grid">
+      <div class="server-card" data-guild="1379674477897715833" data-invite="https://discord.gg/publicxenemy">
+        <div class="server-banner" style="background-image:url('https://file.garden/aW8HDeuOhVaBst0Z/d138bcc1-3425-485e-8502-468140c460d2.png');"></div>
+        <div class="server-body">
+          <img class="server-icon" src="https://file.garden/aTwGuEGhv2Zj85Zr/PBE.jpg" />
+          <div class="server-name">Public Enemy #3K</div>
+          <div class="server-stats">
+            <span class="status-dot"></span>
+            <span class="member-count">Loading...</span>
+          </div>
+          <button class="join-btn">Join Server</button>
+        </div>
+      </div>
+
+      <div class="server-card" data-guild="1367399234596507730" data-invite="https://discord.gg/SP2R54QT4">
+        <div class="server-banner" style="background-image:url('https://file.garden/aT6vZ4PVCwXB1BNw/6666.gif');"></div>
+        <div class="server-body">
+          <img class="server-icon" src="https://file.garden/aT6vZ4PVCwXB1BNw/BANNERE6.png" />
+          <div class="server-name">666 # NEW ERA</div>
+          <div class="server-stats">
+            <span class="status-dot"></span>
+            <span class="member-count">Loading...</span>
+          </div>
+          <button class="join-btn">Join Server</button>
+        </div>
+      </div>
+
+      <div class="server-card" data-guild="" data-invite="">
+        <div class="server-banner" style="background-image:url('');"></div>
+        <div class="server-body">
+          <img class="server-icon" src="" />
+          <div class="server-name"></div>
+          <div class="server-stats">
+            <span class="status-dot"></span>
+            <span class="member-count">Loading...</span>
+          </div>
+          <button class="join-btn">Join Server</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <audio id="intro-audio" src="https://file.garden/aW8HDeuOhVaBst0Z/LOBAT%20-%20COSTA%20CASHMAN%20(OFFICIAL%20MUSIC%20VIDEO)%20(mp3cut.net).mp3"></audio>
+
+  <!-- Firebase SDKs (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <!-- MAIN SCRIPT -->
+  <script>
+    const introPanel = document.getElementById("intro-panel");
+    const content = document.querySelector(".content");
+    const audio = document.getElementById("intro-audio");
+    const logo = document.querySelector(".top-logo");
+    const swagList = document.getElementById('swag');
+
+    const TITLE_TEXTS = {
+      "founded-title": "</$",
+      "fvck-everyone-title": "above all",
+      "pbe-title": "$$$4U",
+      "swags-title": "Public Enemy"
+    };
+
+    function typeWriter(elementId, text) {
+      const el = document.getElementById(elementId);
+      if (!el) return Promise.resolve();
+      el.classList.add('typing-caret');
+      el.textContent = '';
+      let i = 0;
+      return new Promise(resolve => {
+        const type = () => {
+          if (i < text.length) {
+            el.textContent += text.charAt(i);
+            i++;
+            setTimeout(type, 70);
+          } else {
+            el.classList.remove('typing-caret');
+            resolve();
+          }
+        };
+        setTimeout(type, 500);
+      });
+    }
+
+    async function initializeTyping() {
+      await typeWriter("founded-title", TITLE_TEXTS["founded-title"]);
+      await typeWriter("fvck-everyone-title", TITLE_TEXTS["fvck-everyone-title"]);
+      await typeWriter("pbe-title", TITLE_TEXTS["pbe-title"]);
+      await typeWriter("swags-title", TITLE_TEXTS["swags-title"]);
+    }
+
+    introPanel.addEventListener("click", () => {
+      audio.volume = 0;
+      audio.loop = true;
+      audio.play().catch(() => {});
+
+      let fade = setInterval(() => {
+        if (audio.volume < 0.8) {
+          audio.volume = Math.min(audio.volume + 0.02, 0.8);
+        } else {
+          clearInterval(fade);
+        }
+      }, 100);
+
+      introPanel.style.opacity = 0;
+      setTimeout(() => {
+        introPanel.style.display = "none";
+        content.style.display = "flex";
+        logo.style.opacity = 1;
+        initializeTyping();
+      }, 600);
+    });
+
+    const FOUNDED_USER_IDS = ["1461546126581960776","1125646111001030666","842673479828242444"];
+    const FVCKEVERYONE_IDS = ["1136693362821435422","1327181475753234464","1284806306770845822","855429705590636554","1251558452292096122", "1230048285251735642", "1295123677636984865"];
+
+    const PBE_USER_IDS = ["1018861724373360701", "1267576356548640808", "1238255097297899530", "1440000744630780034", "1304992881370595371", "823078377438969908", "", ""];
+
+    const ALL_SWAG_IDS = ["1366313316343091303","1411777799932346460","842673479828242444","1403262048657211464","1416592520753971220","1199501391819972699","1444303256418517095","1444303256418517095","1351691899332857936","1364422301940056167","1276412349871292519","1359671414537588827","1395752738259861676","1303333425754931266","756092694933274685","1257762879948587141","1440349079241625711","757509251663921242","852776914929975357","1295123677636984865","1251558452292096122","1411363896651944046","1300324954784530463","1249756162857898196","1300324954784530463","1166530407651610645","1340482223626911815","1363125619495534663","1411363896651944046","1433319747675754739","1300324954784530463","1166530407651610645","1411777799932346460","842673479828242444","1403262048657211464","1416592520753971220","1199501391819972699","1444303256418517095","1444303256418517095","1351691899332857936","1364422301940056167","1276412349871292519","1359671414537588827","1395752738259861676","1303333425754931266","756092694933274685","1257762879948587141","1440349079241625711","757509251663921242","852776914929975357","1295123677636984865","1251558452292096122","1411363896651944046","1300324954784530463","1249756162857898196","1300324954784530463","1166530407651610645","1340482223626911815","1363125619495534663","1411363896651944046","1433319747675754739","1300324954784530463","1166530407651610645","1166530407651610645","1363125619495534663","1307911619992490065","670192696933089281","1372921949163884666","1358341643278749760","859731981053984788", "1166530407651610645","1363125619495534663","1307911619992490065","670192696933089281","1372921949163884666","1358341643278749760","859731981053984788","1337635364495691796",""];
+
+    const SPOTIFY_LOGO = "https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg";
+    const AUTO_APP_ICONS = {
+      "Visual Studio Code": "https://code.visualstudio.com/assets/favicon.ico",
+      "Roblox": "https://media.discordapp.net/attachments/1438251622366183546/1461265838765244579/250.png?ex=6969ed5c&is=69689bdc&hm=f1d79dee6b7feb6081f5bbc40d9da2f9ae8b7ad9fdb4abc1ab97ae963bc1fec6&=&format=webp&quality=lossless&width=188&height=188",
+      "VALORANT": "https://playvalorant.com/favicon.ico",
+      "CustomRP": "https://media.discordapp.net/attachments/1403952622058340403/1449757594452492319/2d826f8f8f70cae7080bd3e834f283f6.png?ex=69400f79&is=693ebdf9&hm=66a1eb95c33f6ab9f56207614c47febaea6d2fdc05a1b4355677049475943e69&=&format=webp&quality=lossless&width=755&height=755",
+      "FiveM": "https://media.discordapp.net/attachments/1438251622366183546/1461266102620524544/image.png?ex=6969ed9b&is=69689c1b&hm=cb867e92ddb8811533b21e759e0ac145462320f36c582dee643ffe268dc93443&=&format=webp&quality=lossless&width=300&height=300"
+    };
+
+    async function loadProfiles(userIds, containerId) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+
+      const cleanIds = (userIds || []).filter(id => typeof id === "string" && id.trim().length > 0);
+
+      const fetchPromises = cleanIds.map(id =>
+        fetch(`https://api.lanyard.rest/v1/users/${id}`)
+          .then(res => res.json())
+          .catch(() => null)
+      );
+
+      const responses = await Promise.all(fetchPromises);
+
+      responses.forEach((data, index) => {
+        if (!data || !data.success) return;
+
+        const userId = cleanIds[index];
+        const info = data.data;
+        const user = info.discord_user;
+
+        let avatarURL;
+        if (user.avatar && user.avatar.startsWith("a_")) {
+          avatarURL = `https://cdn.discordapp.com/avatars/${userId}/${user.avatar}.gif?size=512`;
+        } else if (user.avatar) {
+          avatarURL = `https://cdn.discordapp.com/avatars/${userId}/${user.avatar}.png?size=512`;
+        } else {
+          avatarURL = `https://cdn.discordapp.com/embed/avatars/${(user.discriminator % 5)}.png`;
+        }
+
+        const status = info.discord_status || "offline";
+        const statusClass = {
+          online: "status-online", idle: "status-idle", dnd: "status-dnd", offline: "status-offline"
+        }[status] || "status-offline";
+
+        let activityName = "";
+        let activityDetails = "";
+        let activityIcon = null;
+
+        if (info.activities && info.activities.length > 0) {
+          const act = info.activities.find(a => a.type === 0 || a.type === 2) ||
+                      info.activities.find(a => a.type === 4) ||
+                      info.activities[0];
+
+          if (act.type === 2) {
+            activityName = "Listening to Spotify";
+            activityDetails = `${act.details || ""} — ${act.state || ""}`;
+            activityIcon = SPOTIFY_LOGO;
+          } else if (act.type === 0) {
+            activityName = `Playing ${act.name}`;
+            activityDetails = act.details || act.state || "";
+            if (act.assets?.large_image?.startsWith("mp:")) {
+              activityIcon = `https://media.discordapp.net/${act.assets.large_image.replace("mp:", "")}.png`;
+            } else if (act.assets?.large_image) {
+              activityIcon = `https://cdn.discordapp.com/app-assets/${act.application_id}/${act.assets.large_image}.png`;
+            }
+            if (!activityIcon && AUTO_APP_ICONS[act.name]) {
+              activityIcon = AUTO_APP_ICONS[act.name];
+            }
+          } else if (act.type === 4) {
+            activityName = "";
+            activityDetails = act.state || "";
+          }
+        }
+
+        const profile = document.createElement("div");
+        profile.className = (containerId === "swag") ? "swag" : "profile";
+
+        const hoverCard = `
+          <div class="profile-info ${containerId === "swag" ? "swag-hover-card" : ""}">
+            <img src="${avatarURL}" class="info-avatar" alt="${user.username}'s avatar">
+            <div class="info-text-container">
+              <div class="name-row">
+                <span class="profile-name">${user.global_name || user.username}</span>
+                <span class="status-dot ${statusClass}"></span>
+              </div>
+              <div class="profile-username">@${user.username}</div>
+            </div>
+            <div class="section-divider"></div>
+            <div class="activity-row">
+              <div class="activity-text">
+                <div class="profile-activity">${activityName || ""}</div>
+                <div class="activity-details">${activityDetails || ""}</div>
+              </div>
+              ${activityIcon ? `<img class="activity-icon" src="${activityIcon}" alt="Activity Icon">` : ""}
+            </div>
+          </div>
+        `;
+
+        if (containerId === "swag") {
+          profile.innerHTML = `
+            <img src="${avatarURL}" alt="${user.username}">
+            <span>${user.username}</span>
+            ${hoverCard}
+          `;
+        } else {
+          profile.innerHTML = `
+            <img src="${avatarURL}" class="profile-pic" alt="${user.username}'s avatar">
+            ${hoverCard}
+          `;
+        }
+
+        container.appendChild(profile);
+      });
+    }
+
+    loadProfiles(FOUNDED_USER_IDS, "founded-list");
+    loadProfiles(FVCKEVERYONE_IDS, "fvck-everyone-list");
+    loadProfiles(PBE_USER_IDS, "pbe-list");
+    loadProfiles(ALL_SWAG_IDS, "swag");
+
+    function restartAnimation() {
+      if (!swagList) return;
+      swagList.style.animation = 'none';
+      swagList.offsetHeight;
+      swagList.style.animation = 'scrollLoop 40s linear infinite';
+    }
+
+    if (swagList) {
+      swagList.addEventListener('animationend', restartAnimation);
+      document.addEventListener('DOMContentLoaded', restartAnimation);
+      swagList.addEventListener('mouseenter', () => swagList.style.animationPlayState = 'paused');
+      swagList.addEventListener('mouseleave', () => swagList.style.animationPlayState = 'running');
+    }
+
+    async function loadServer(card) {
+      const guildId = card.dataset.guild;
+      const invite = card.dataset.invite;
+      const countEl = card.querySelector('.member-count');
+      const statusDot = card.querySelector('.status-dot');
+      const btn = card.querySelector('.join-btn');
+
+      btn.onclick = () => window.open(invite, '_blank');
+
+      try {
+        const res = await fetch(`https://discord.com/api/guilds/${guildId}/widget.json`);
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+        const online = data.presence_count || 0;
+        const total = data.members?.length > 100 ? "100+" : data.members?.length || "0";
+        countEl.textContent = `${online} / ${total} Members Online`;
+        statusDot.style.background = '#43b581';
+      } catch {
+        countEl.textContent = 'Widget Disabled';
+        statusDot.style.background = '#f04747';
+      }
+    }
+
+    document.querySelectorAll('.server-card').forEach(loadServer);
+
+    document.addEventListener("contextmenu", (e) => e.preventDefault());
+    document.addEventListener("keydown", (e) => {
+      if (
+        e.key === "F12" ||
+        (e.ctrlKey && e.shiftKey && e.key === "I") ||
+        (e.ctrlKey && e.shiftKey && e.key === "J") ||
+        (e.ctrlKey && e.key === "U")
+      ) {
+        e.preventDefault();
+      }
+    });
+  </script>
+
+  <!-- VIEWS COUNT (FIRESTORE) -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCGPKvVPL8IgBTjJ8BV8LLs5RjHg97--WI",
+      authDomain: "siteviews-6ac5c.firebaseapp.com",
+      projectId: "siteviews-6ac5c",
+      storageBucket: "siteviews-6ac5c.firebasestorage.app",
+      messagingSenderId: "963960122654",
+      appId: "1:963960122654:web:f66c892cddac2a7adead0f",
+      measurementId: "G-7MCK42ZD0G"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.firestore();
+    const counterDoc = db.collection('counters').doc('visitorCount');
+
+    async function incrementVisitorCount() {
+      try {
+        await db.runTransaction(async (transaction) => {
+          const doc = await transaction.get(counterDoc);
+          if (!doc.exists) {
+            transaction.set(counterDoc, { count: 1 });
+            return 1;
+          }
+          const newCount = (doc.data().count || 0) + 1;
+          transaction.update(counterDoc, { count: newCount });
+          return newCount;
+        }).then((newCount) => {
+          const countElement = document.getElementById('view-count');
+          if (countElement) countElement.innerText = newCount;
+        });
+      } catch (e) {
+        console.error("Transaction failed: ", e);
+        const countElement = document.getElementById('view-count');
+        if (countElement) countElement.innerText = "Error";
+      }
+    }
+
+    incrementVisitorCount();
+  </script>
+</body>
+</html>
